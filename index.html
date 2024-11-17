@@ -99,11 +99,6 @@
             font-size: 14px;
         }
 
-        /* Focused input styles */
-        input:focus {
-            box-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
-        }
-
         #logout-btn {
             background-color: #ff4d4d;
             border-radius: 8px;
@@ -114,8 +109,8 @@
             background-color: #ff3333;
         }
 
-        /* Small card styles */
-        .card, .enhanced-card {
+        /* Card styles */
+        .enhanced-card {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -126,19 +121,8 @@
             transition: transform 0.3s ease;
         }
 
-        .card:hover, .enhanced-card:hover {
+        .enhanced-card:hover {
             transform: translateY(-10px);
-        }
-
-        .enhanced-card {
-            background: linear-gradient(135deg, #ff7a00, #ff0099);
-            color: white;
-        }
-
-        .enhanced-card i {
-            font-size: 50px;
-            margin-bottom: 15px;
-            color: #fff;
         }
 
         .enhanced-card h3 {
@@ -147,25 +131,27 @@
         }
 
         .enhanced-card a {
-            color: #fff;
+            color: #00ffb3;
             font-size: 16px;
             text-decoration: none;
             font-weight: bold;
-            padding: 12px 20px;
-            background-color: #ff3333;
+            padding: 8px 15px;
+            border: 2px solid #00ffb3;
             border-radius: 8px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .enhanced-card a:hover {
-            background-color: #ff1a1a;
+            background-color: #00ffb3;
+            color: white;
         }
     </style>
 </head>
 <body>
+    <!-- Login Container -->
     <div class="login-container" id="login-container">
         <h2>Login</h2>
-        <form id="loginForm" action="#" method="post">
+        <form id="loginForm">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required placeholder="Enter your username">
             
@@ -177,48 +163,41 @@
         <p id="error-message"></p>
     </div>
 
+    <!-- Welcome Container -->
     <div class="welcome-container" id="welcome-container">
         <h2>Successfully Logged In</h2>
         <p>Welcome, <span id="user-name"></span>!</p>
         <button id="logout-btn">Logout</button>
 
         <!-- Cards -->
-        <div class="enhanced-card">
-            <i class="fas fa-globe"></i>
-            <h3>Anitoono Website</h3>
-            <a href="https://anitoono.blogspot.com/?m=1" target="_blank">Visit Website</a>
-        </div>
+        <div id="card-container">
+            <div class="enhanced-card">
+                <h3>Anitoono Website</h3>
+                <a href="https://anitoono.blogspot.com/?m=1" target="_blank">Visit Website</a>
+            </div>
 
-        <div class="enhanced-card">
-            <i class="fas fa-database"></i>
-            <h3>Contact Us Database</h3>
-            <a href="https://formspree.io/forms/xldedevn/submissions" target="_blank">Contact Us</a>
-        </div>
-
-        <div class="enhanced-card">
-            <i class="fas fa-user-check"></i>
-            <h3>Verified Members</h3>
-            <a href="https://example.com/verified-members" target="_blank">View Members</a>
+            <div class="enhanced-card">
+                <h3>Contact Us Database</h3>
+                <a href="https://formspree.io/forms/xldedevn/submissions" target="_blank">Contact Us</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Check if the user is already logged in from localStorage
+        // Check if the user is already logged in
         if (localStorage.getItem('loggedIn') === 'true') {
             showWelcomePage();
         }
 
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
+
             const correctUsername = 'anitoono';
             const correctPassword = '45644564';
-            
+
             if (username === correctUsername && password === correctPassword) {
-                // Save login status in localStorage
                 localStorage.setItem('loggedIn', 'true');
                 localStorage.setItem('username', username);
                 showWelcomePage();
@@ -228,30 +207,43 @@
         });
 
         document.getElementById('logout-btn').addEventListener('click', function() {
-            // Clear login status from localStorage and show login page again
             localStorage.removeItem('loggedIn');
             localStorage.removeItem('username');
             showLoginPage();
         });
 
-        // Function to show the login page
         function showLoginPage() {
             document.getElementById('login-container').style.display = 'block';
             document.getElementById('welcome-container').style.display = 'none';
-            document.getElementById('error-message').textContent = '';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
         }
 
-        // Function to show the welcome page
         function showWelcomePage() {
             document.getElementById('login-container').style.display = 'none';
             document.getElementById('welcome-container').style.display = 'block';
             document.getElementById('user-name').textContent = localStorage.getItem('username');
         }
-    </script>
 
-    <!-- Add Font Awesome for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        // Function to add a new card dynamically
+        function addCard(title, linkText, linkUrl) {
+            const cardContainer = document.getElementById('card-container');
+            const card = document.createElement('div');
+            card.className = 'enhanced-card';
+
+            const heading = document.createElement('h3');
+            heading.textContent = title;
+            card.appendChild(heading);
+
+            const link = document.createElement('a');
+            link.href = linkUrl;
+            link.textContent = linkText;
+            link.target = '_blank';
+            card.appendChild(link);
+
+            cardContainer.appendChild(card);
+        }
+
+        // Example: Adding a new card dynamically
+        addCard('Documentation', 'View Docs', 'https://example.com/docs');
+    </script>
 </body>
 </html>
